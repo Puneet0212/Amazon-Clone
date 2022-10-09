@@ -1,17 +1,24 @@
 import React, { useState } from 'react';
 import './Login.css';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth } from "./firebase";
 
 
 function Login() {
 
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const signIn = e => {
         e.preventDefault();
 
+        auth
+            .signInWithEmailAndPassword(email, password)
+            .then(auth => {
+                navigate('/')
+            })
+            .catch(error => alert(error.message))
 
     }
 
@@ -23,8 +30,14 @@ function Login() {
             .then((auth) => {
                 //it will successsfully create a new user with email and password
                 console.log(auth);
+
+                //if Authentication is successful you will be redirected/navigated to amazon home page
+                if (auth){
+                    navigate('/')
+                }
             })
             .catch(error => alert(error.message))
+
 
 
     }
